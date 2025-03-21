@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\ServiceController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\admin\TempImageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthenticationController;
 
@@ -15,5 +15,11 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
 
     // services
     Route::post('services', [ServiceController::class, 'store']);
+    Route::put('services/{id}', [ServiceController::class, 'update']);
     Route::get('services', [ServiceController::class, 'index']);
+    Route::get('services/{id}', [ServiceController::class, 'show']);
+    Route::delete('services/{id}', [ServiceController::class, 'destroy']);
+
+    // temp image
+    Route::post('temp-images', [TempImageController::class, 'store']);
 });
