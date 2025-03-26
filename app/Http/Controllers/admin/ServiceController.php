@@ -66,7 +66,7 @@ class ServiceController extends Controller {
             $tempImage = TempImage::find( $imageId );
 
             if ( $tempImage != null ) {
-                $extArray = explode( '.', $tempImage );
+                $extArray = explode( '.', $tempImage->name );
                 $ext = last( $extArray );
                 $fileName = strtotime( 'now' ).$service->id.'.'.$ext;
 
@@ -114,7 +114,7 @@ class ServiceController extends Controller {
 
         return response()->json( [
             'status' => true,
-            'message' => $service,
+            'data' => $service,
         ] );
     }
 
@@ -165,10 +165,12 @@ class ServiceController extends Controller {
             $tempImage = TempImage::find( $imageId );
 
             if ( $tempImage != null ) {
-                $extArray = explode( '.', $tempImage );
+                $extArray = explode( '.', $tempImage->name );
                 $ext = last( $extArray );
+                dd( $ext );
                 $fileName = strtotime( 'now' ).$service->id.'.'.$ext;
 
+                dd( $fileName );
                 // get image from temp
                 $sourcePath = public_path( 'uploads/temp/'. $tempImage->name );
 

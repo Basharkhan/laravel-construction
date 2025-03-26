@@ -11,8 +11,9 @@ use Intervention\Image\ImageManager;
 
 class TempImageController extends Controller {
     public function store( Request $request ) {
+
         $validator = Validator::make( $request->all(), [
-            'image' => 'required|mimes:png,jpg,jpeg,gif'
+            'image' => 'mimes:jpeg,jpg,png,gif|required'
         ] );
 
         if ( $validator->fails() ) {
