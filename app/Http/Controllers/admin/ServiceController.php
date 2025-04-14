@@ -131,6 +131,7 @@ class ServiceController extends Controller {
     */
 
     public function update( Request $request, string $id ) {
+        // dd( $request );
         $service = Service::find( $id );
 
         if ( $service === null ) {
@@ -163,14 +164,14 @@ class ServiceController extends Controller {
         $imageId = $request->imageId;
         if ( $imageId > 0 ) {
             $tempImage = TempImage::find( $imageId );
+            $oldImage = $service->image;
 
             if ( $tempImage != null ) {
                 $extArray = explode( '.', $tempImage->name );
                 $ext = last( $extArray );
-                dd( $ext );
+
                 $fileName = strtotime( 'now' ).$service->id.'.'.$ext;
 
-                dd( $fileName );
                 // get image from temp
                 $sourcePath = public_path( 'uploads/temp/'. $tempImage->name );
 
@@ -191,7 +192,6 @@ class ServiceController extends Controller {
                 $service->image = $fileName;
                 $service->save();
 
-                $oldImage = $service->image;
                 if ( $oldImage != null ) {
                     File::delete( 'uploads/services/small/'. $oldImage );
                     File::delete( 'uploads/services/large/'. $oldImage );
