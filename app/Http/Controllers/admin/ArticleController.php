@@ -14,7 +14,7 @@ use Intervention\Image\ImageManager;
 
 class ArticleController extends Controller {
     public function allArticles() {
-        $articles = Article::where( 'status', 1 )->orderBy( 'created_at', 'desc' )->get();
+        $articles = Article::orderBy( 'created_at', 'desc' )->get();
 
         return response()->json( [
             'status' => true,

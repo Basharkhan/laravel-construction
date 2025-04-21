@@ -5,10 +5,12 @@ use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\ProjectController;
 use App\Http\Controllers\admin\ServiceController;
 use App\Http\Controllers\admin\TempImageController;
+use App\Http\Controllers\admin\TestimonialController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\front\ServiceController as FrontServiceController;
 use App\Http\Controllers\front\ProjectController as FrontProjectController;
+use App\Http\Controllers\front\ArticleController as FrontArticleController;
 
 Route::post('authenticate', [AuthenticationController::class, 'authenticate']);
 // services
@@ -18,6 +20,10 @@ Route::get('get-latest-services', [FrontServiceController::class, 'latestService
 // projects
 Route::get('get-projects', [FrontProjectController::class, 'allProjects']);
 Route::get('get-latest-projects', [FrontProjectController::class, 'latestProjects']);
+
+// articles
+Route::get('get-articles', [FrontArticleController::class, 'index']);
+Route::get('get-latest-articles', [FrontArticleController::class, 'latestArticles']);
 
 // protected route
 Route::group(['middleware' => ['auth:sanctum']], function() {
@@ -44,6 +50,13 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::get('articles', [ArticleController::class, 'allArticles']);
     Route::get('articles/{id}', [ArticleController::class, 'show']);
     Route::delete('articles/{id}', [ArticleController::class, 'destroy']);
+
+    // testimonials
+    Route::post('testimonials', [TestimonialController::class, 'store']);
+    Route::put('testimonials/{id}', [TestimonialController::class, 'update']);
+    Route::get('testimonials', [TestimonialController::class, 'index']);
+    Route::get('testimonials/{id}', [TestimonialController::class, 'show']);
+    Route::delete('testimonials/{id}', [TestimonialController::class, 'destroy']);
 
     // temp image
     Route::post('temp-images', [TempImageController::class, 'store']);
