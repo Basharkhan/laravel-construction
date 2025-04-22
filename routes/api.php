@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\admin\ArticleController;
 use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\admin\MemberController;
 use App\Http\Controllers\admin\ProjectController;
 use App\Http\Controllers\admin\ServiceController;
 use App\Http\Controllers\admin\TempImageController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\front\ServiceController as FrontServiceController;
 use App\Http\Controllers\front\ProjectController as FrontProjectController;
 use App\Http\Controllers\front\ArticleController as FrontArticleController;
+use App\Http\Controllers\front\TestimonialController as FrontTestimonialController;use App\Http\Controllers\front\DashboardController as FrontDashboardController;
 
 Route::post('authenticate', [AuthenticationController::class, 'authenticate']);
 // services
@@ -24,6 +26,9 @@ Route::get('get-latest-projects', [FrontProjectController::class, 'latestProject
 // articles
 Route::get('get-articles', [FrontArticleController::class, 'index']);
 Route::get('get-latest-articles', [FrontArticleController::class, 'latestArticles']);
+
+// testimonials
+Route::get('get-testimonials', [FrontTestimonialController::class, 'index']);
 
 // protected route
 Route::group(['middleware' => ['auth:sanctum']], function() {
@@ -57,6 +62,13 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::get('testimonials', [TestimonialController::class, 'index']);
     Route::get('testimonials/{id}', [TestimonialController::class, 'show']);
     Route::delete('testimonials/{id}', [TestimonialController::class, 'destroy']);
+
+    // members
+    Route::post('members', [MemberController::class, 'store']);
+    Route::put('members/{id}', [MemberController::class, 'update']);
+    Route::get('members', [MemberController::class, 'index']);
+    Route::get('members/{id}', [MemberController::class, 'show']);
+    Route::delete('members/{id}', [MemberController::class, 'destroy']);
 
     // temp image
     Route::post('temp-images', [TempImageController::class, 'store']);

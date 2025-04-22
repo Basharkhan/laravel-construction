@@ -3,28 +3,27 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Member;
 use App\Models\TempImage;
-use App\Models\Testimonial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 
-class TestimonialController extends Controller {
+class MemberController extends Controller {
     public function index() {
-        $testimonials = Testimonial::orderBy( 'created_at', 'DESC' )->get();
-
+        $members = Member::where( 'status', 1 )->orderBy( 'id', 'desc' )->get();
         return response()->json( [
             'status' => true,
-            'data' => $testimonials,
+            'data' => $members
         ] );
     }
 
     public function store( Request $request ) {
         $validator = Validator::make( $request->all(), [
-            'testimonial' => 'required',
-            'citation' => 'required',
+            'name' => 'required',
+            'job_title' => 'required',
         ] );
 
         if ( $validator->fails() ) {
@@ -34,12 +33,12 @@ class TestimonialController extends Controller {
             ] );
         }
 
-        $testimonial = new Testimonial();
-        $testimonial->testimonial = $request->testimonial;
-        $testimonial->citation = $request->citation;
-        $testimonial->status = $request->status;
-        $testimonial->designation = $request->designation;
-        $testimonial->save();
+        $member = new Member();
+        $member->name = $request->name;
+        $member->job_title = $request->job_title;
+        $member->linkin_url = $request->linkin_url;
+        $member->status = $request->status;
+        $member->save();
 
         // save temp image
         $imageId = $request->imageId;
@@ -49,42 +48,42 @@ class TestimonialController extends Controller {
             if ( $tempImage != null ) {
                 $extArray = explode( '.', $tempImage->name );
                 $ext = last( $extArray );
-                $fileName = strtotime( 'now' ).$testimonial->id.'.'.$ext;
+                $fileName = strtotime( 'now' ).$member->id.'.'.$ext;
 
                 // get image from temp
                 $sourcePath = public_path( 'uploads/temp/'. $tempImage->name );
 
                 // create small thumbnail
-                $destPath = public_path( 'uploads/testimonials/'. $fileName );
+                $destPath = public_path( 'uploads/members/'. $fileName );
                 $manager = new ImageManager( Driver::class );
                 $image = $manager->read( $sourcePath );
-                $image->coverDown( 300, 300 );
+                $image->coverDown( 400, 500 );
                 $image->save( $destPath );
 
-                $testimonial->image = $fileName;
-                $testimonial->save();
+                $member->image = $fileName;
+                $member->save();
             }
         }
 
         return response()->json( [
             'status' => true,
-            'message' => 'Testimonial added successfully'
+            'message' => 'Member added successfully'
         ] );
     }
 
-    public function update( Request $request, string $id ) {
-        $testimonial = Testimonial::find( $id );
+    public function update( Request $request, $id ) {
+        $member = Member::find( $id );
 
-        if ( $testimonial === null ) {
+        if ( $member == null ) {
             return response()->json( [
                 'status' => false,
-                'message' => 'Testimonial not found'
+                'message' => 'Member not found',
             ] );
         }
 
         $validator = Validator::make( $request->all(), [
-            'testimonial' => 'required',
-            'citation' => 'required',
+            'name' => 'required',
+            'job_title' => 'required',
         ] );
 
         if ( $validator->fails() ) {
@@ -94,38 +93,38 @@ class TestimonialController extends Controller {
             ] );
         }
 
-        $testimonial->testimonial = $request->testimonial;
-        $testimonial->citation = $request->citation;
-        $testimonial->status = $request->status;
-        $testimonial->designation = $request->designation;
-        $testimonial->save();
+        $member->name = $request->name;
+        $member->job_title = $request->job_title;
+        $member->linkin_url = $request->linkin_url;
+        $member->status = $request->status;
+        $member->save();
 
         // save temp image
         $imageId = $request->imageId;
         if ( $imageId > 0 ) {
+            $oldImage = $member->image;
             $tempImage = TempImage::find( $imageId );
-            $oldImage = $testimonial->image;
 
             if ( $tempImage != null ) {
                 $extArray = explode( '.', $tempImage->name );
                 $ext = last( $extArray );
-                $fileName = strtotime( 'now' ).$testimonial->id.'.'.$ext;
+                $fileName = strtotime( 'now' ).$member->id.'.'.$ext;
 
                 // get image from temp
                 $sourcePath = public_path( 'uploads/temp/'. $tempImage->name );
 
                 // create small thumbnail
-                $destPath = public_path( 'uploads/testimonials/'. $fileName );
+                $destPath = public_path( 'uploads/members/'. $fileName );
                 $manager = new ImageManager( Driver::class );
                 $image = $manager->read( $sourcePath );
-                $image->coverDown( 300, 300 );
+                $image->coverDown( 400, 500 );
                 $image->save( $destPath );
 
-                $testimonial->image = $fileName;
-                $testimonial->save();
+                $member->image = $fileName;
+                $member->save();
 
                 if ( $oldImage != null ) {
-                    File::delete( 'uploads/testimonials/'. $oldImage );
+                    File::delete( 'uploads/members/'. $oldImage );
 
                 }
             }
@@ -133,43 +132,43 @@ class TestimonialController extends Controller {
 
         return response()->json( [
             'status' => true,
-            'message' => 'Testimonial updated successfully'
+            'message' => 'Member updated successfully'
         ] );
     }
 
     public function show( string $id ) {
-        $testimonial = Testimonial::find( $id );
+        $member = Member::find( $id );
 
-        if ( $testimonial === null ) {
+        if ( $member === null ) {
             return response()->json( [
                 'status' => false,
-                'message' => 'Testimonial not found',
+                'message' => 'Member not found',
             ] );
         }
 
         return response()->json( [
             'status' => true,
-            'data' => $testimonial,
+            'data' => $member,
         ] );
     }
 
     public function destroy( string $id ) {
-        $testimonial = Testimonial::find( $id );
+        $member = Member::find( $id );
 
-        if ( $testimonial === null ) {
+        if ( $member === null ) {
             return response()->json( [
                 'status' => false,
-                'message' => 'Testimonial not found',
+                'message' => 'Member not found',
             ] );
         }
 
-        File::delete( 'uploads/projects/small/'. $testimonial->image );
+        File::delete( 'uploads/members/'. $member->image );
 
-        $testimonial->delete();
+        $member->delete();
 
         return response()->json( [
             'status' => true,
-            'message' => 'Testimonial deleted successfully',
+            'message' => 'Member deleted successfully',
         ] );
     }
 }
