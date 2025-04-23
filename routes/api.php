@@ -12,7 +12,9 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\front\ServiceController as FrontServiceController;
 use App\Http\Controllers\front\ProjectController as FrontProjectController;
 use App\Http\Controllers\front\ArticleController as FrontArticleController;
-use App\Http\Controllers\front\TestimonialController as FrontTestimonialController;use App\Http\Controllers\front\DashboardController as FrontDashboardController;
+use App\Http\Controllers\front\TestimonialController as FrontTestimonialController;
+use App\Http\Controllers\front\MemberController as FrontMemberController;
+
 
 Route::post('authenticate', [AuthenticationController::class, 'authenticate']);
 // services
@@ -29,6 +31,9 @@ Route::get('get-latest-articles', [FrontArticleController::class, 'latestArticle
 
 // testimonials
 Route::get('get-testimonials', [FrontTestimonialController::class, 'index']);
+
+// members
+Route::get('get-members', [FrontMemberController::class, 'index']);
 
 // protected route
 Route::group(['middleware' => ['auth:sanctum']], function() {
