@@ -25,6 +25,7 @@ Route::get('get-service/{id}', [FrontServiceController::class, 'show']);
 // projects
 Route::get('get-projects', [FrontProjectController::class, 'allProjects']);
 Route::get('get-latest-projects', [FrontProjectController::class, 'latestProjects']);
+Route::get('get-project/{id}', [FrontProjectController::class, 'show']);
 
 // articles
 Route::get('get-articles', [FrontArticleController::class, 'index']);
