@@ -30,4 +30,22 @@ class ArticleController extends Controller {
         ] );
 
     }
+
+    /**
+    * Get article by id
+    */
+
+    public function show( $id ) {
+        $article = Article::where( 'id', $id )->first();
+        if ( !$article ) {
+            return response()->json( [
+                'status' => false,
+                'message' => 'Article not found',
+            ], 404 );
+        }
+        return response()->json( [
+            'status' => true,
+            'data' => $article,
+        ] );
+    }
 }

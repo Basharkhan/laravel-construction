@@ -31,4 +31,22 @@ class ServiceController extends Controller {
         ] );
 
     }
+
+    /**
+    * Show service by id
+    */
+
+    public function show( $id ) {
+        $service = Service::where( 'id', $id )->first();
+        if ( !$service ) {
+            return response()->json( [
+                'status' => false,
+                'message' => 'Service not found',
+            ], 404 );
+        }
+        return response()->json( [
+            'status' => true,
+            'data' => $service,
+        ] );
+    }
 }

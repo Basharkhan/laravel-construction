@@ -20,6 +20,7 @@ Route::post('authenticate', [AuthenticationController::class, 'authenticate']);
 // services
 Route::get('get-services', [FrontServiceController::class, 'index']);
 Route::get('get-latest-services', [FrontServiceController::class, 'latestServices']);
+Route::get('get-service/{id}', [FrontServiceController::class, 'show']);
 
 // projects
 Route::get('get-projects', [FrontProjectController::class, 'allProjects']);
@@ -28,6 +29,7 @@ Route::get('get-latest-projects', [FrontProjectController::class, 'latestProject
 // articles
 Route::get('get-articles', [FrontArticleController::class, 'index']);
 Route::get('get-latest-articles', [FrontArticleController::class, 'latestArticles']);
+Route::get('get-article/{id}', [FrontArticleController::class, 'show']);
 
 // testimonials
 Route::get('get-testimonials', [FrontTestimonialController::class, 'index']);
