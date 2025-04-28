@@ -12,6 +12,7 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\front\ServiceController as FrontServiceController;
 use App\Http\Controllers\front\ProjectController as FrontProjectController;
 use App\Http\Controllers\front\ArticleController as FrontArticleController;
+use App\Http\Controllers\front\ContactController;
 use App\Http\Controllers\front\TestimonialController as FrontTestimonialController;
 use App\Http\Controllers\front\MemberController as FrontMemberController;
 
@@ -37,6 +38,9 @@ Route::get('get-testimonials', [FrontTestimonialController::class, 'index']);
 
 // members
 Route::get('get-members', [FrontMemberController::class, 'index']);
+
+// contact
+Route::post('contact', [ContactController::class, 'sendMail']);
 
 // protected route
 Route::group(['middleware' => ['auth:sanctum']], function() {
